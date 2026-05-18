@@ -1,8 +1,8 @@
 # Laboratorio Android. Cliente de GitHub
 
 ## Datos  del estudiante
-- [Nombre del estudiante]
-- [Carrera]
+- Nombre: Keila Cerda
+- Carrera: Ingeniería en Software
 
 ## Descripción del Proyecto
 Este proyecto es un ejercicio de laboratorio para estudiantes donde se implementará una aplicación Android que simula un cliente de GitHub utilizando Jetpack Compose. La aplicación se centrará en la implementación de interfaces modernas y componentes declarativos, sin integración con la API REST de GitHub en esta fase.
