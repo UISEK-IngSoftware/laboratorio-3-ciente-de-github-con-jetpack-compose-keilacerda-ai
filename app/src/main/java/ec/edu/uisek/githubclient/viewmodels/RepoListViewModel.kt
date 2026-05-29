@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class RepoListViewModel: ViewModel () {
+
     private val _repos = MutableStateFlow<List<Repository>>(emptyList())
     val repos: StateFlow<List<Repository>> = _repos.asStateFlow()
 
@@ -19,6 +20,10 @@ class RepoListViewModel: ViewModel () {
 
     private val _errorMsg = MutableStateFlow<String?>(null)
     val errorMsg: StateFlow<String?> = _errorMsg.asStateFlow()
+
+    init {
+        fetchRepos()
+    }
 
     fun fetchRepos() {
         viewModelScope.launch {
@@ -31,6 +36,18 @@ class RepoListViewModel: ViewModel () {
                 e.printStackTrace()
             } finally {
                 _isLoading.value = false
+            }
+        }
+    }
+
+    fun deleteRepo(owner: String, repo: String) {
+        viewModelScope.launch {
+            try {
+                RetrofitClient.apiService.deleteRepository(owner, repo)
+                fetchRepos()
+            } catch (e: Exception) {
+                _errorMsg.value = "Error al eliminar: ${e.localizedMessage}"
+                e.printStackTrace()
             }
         }
     }

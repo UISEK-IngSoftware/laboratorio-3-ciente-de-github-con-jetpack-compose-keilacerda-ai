@@ -17,8 +17,8 @@ class RepoFormViewModel: ViewModel() {
     private val _errorMsg = MutableStateFlow<String?>(null)
     val errorMsg: StateFlow<String?> = _errorMsg.asStateFlow()
 
-    private  val _isSuccess = MutableStateFlow(true)
-    val isSuccess: StateFlow<Boolean> = _isLoading.asStateFlow()
+    private  val _isSuccess = MutableStateFlow(false)
+    val isSuccess: StateFlow<Boolean> = _isSuccess.asStateFlow()
 
     fun  createRepo(name: String, description: String) {
         viewModelScope.launch {
@@ -39,6 +39,32 @@ class RepoFormViewModel: ViewModel() {
 
     fun resetSuccess() {
         _isSuccess.value = false
+    }
+
+    fun updateRepo(
+        owner: String,
+        repo: String,
+        name: String,
+        description: String
+    ) {
+    viewModelScope.launch {
+        _isLoading.value = true
+        _errorMsg.value = null
+        try {
+            val payload = RepositoryPayload(
+                name = name,
+                description = description
+            )
+            apiService.updateRepository(owner, repo, payload
+            )
+            _isSuccess.value = true
+        } catch (e: Exception) {
+            _errorMsg.value = "Error al actualizar: ${e.localizedMessage}"
+            e.printStackTrace()
+        } finally {
+            _isLoading.value = false
+        }
+    }
     }
 }
 
